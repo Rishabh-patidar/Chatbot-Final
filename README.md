@@ -1,23 +1,46 @@
+Silver Chatbot
+Silver Chatbot is a simple chat application built using FastAPI and React.
+
+Getting Started -->
+
+Backend
+Navigate to the backend directory.
+Install the required Python packages(virtual environment):
+python install -m venv venv;
+venv/Scripts/activate
+bash:
+pip install fastapi
+pip install uvicorn
+Run the FastAPI backend server:
+bash
+uvicorn main:app --reload
+
+Frontend
+Navigate to the frontend directory.
+Install the required Node.js packages:
+bash
+npm install
+Run the React frontend:
+bash
+npm start
+
 <!-- Explanation of the React.js `app.js` file:
+1. The `useState` hook is used to manage state in the functional component. Two states are defined: `inputText` to track the user's input and `chatHistory` to keep track of the conversation history.
 
-1. `import React, { useState, useEffect } from 'react';`: This line imports the necessary modules from the React library.
+2. The `handleInputChange` function is triggered whenever the user types in the input field. It updates the `inputText` state with the current input.
 
-2. `function App() { ... }`: This is the main component of your React app. It defines the behavior and layout of your chatbot user interface.
+3. The `handleSend` function is triggered when the user clicks the "Send" button. It performs the following steps:
+   - If the input is empty or contains only whitespace, it returns early.
+   - Adds the user's message to the chat history with `isUser` set to `true`, and a "Sending query..." message with `isUser` set to `false`.
+   - Sends the user input to the FastAPI backend using a POST request.
+   - If the response is successful, it updates the temporary "Sending query..." message with the actual response from the backend and adds it to the chat history with `isUser` set to `false`.
+   - Clears the input field and removes the temporary "Sending query..." message from the chat history.
 
-3. `useState` and `useEffect`: These are React hooks used to manage state and perform side effects respectively.
+4. The return section of the component renders the chat interface. It maps through the `chatHistory` array to display each message in a `div` element. The class of each `div` is determined by the `isUser` property of the message, either `'user'` or `'bot'`.
 
-4. `inputText` and `setInputText`: These variables hold the user's input text and the function to update it.
-
-5. `chatHistory` and `setChatHistory`: These variables hold the chat history and the function to update it.
-
-6. `handleInputChange`: This function handles the change event of the input field and updates `inputText`.
-
-7. `handleSend`: This function sends the user's input to the FastAPI backend, receives the bot's response, and updates the chat history.
-
-8. `return`: The JSX code that defines the layout of your chatbot user interface.
+5. The input field and "Send" button allow the user to interact with the chatbot. When the user types a message and clicks "Send," the conversation is updated in real time based on the user's input and the bot's response.
 
 Explanation of the FastAPI `app.py` file:
-
 1. `from fastapi import FastAPI, HTTPException`: These lines import the necessary modules from the FastAPI library.
 
 2. `from pydantic import BaseModel`: This line imports `BaseModel` from the Pydantic library, which is used for defining request and response models.
@@ -30,8 +53,7 @@ Explanation of the FastAPI `app.py` file:
 
 6. `class BotResponse(BaseModel): ...`: This defines a Pydantic model `BotResponse` with a single field `response`.
 
-7. `@app.post("/process_input/", response_model=BotResponse)`: This is a
-
-FastAPI route decorator that listens for POST requests at the specified path and returns a `BotResponse`.
+7. `@app.post("/process_input/", response_model=BotResponse)`: This is a FastAPI route decorator that listens for POST requests at the specified path and returns a `BotResponse`.
 
 8. `def process_input(message: Message): ...`: This function handles the POST request. It takes a `Message` object as input, processes the bot's response , and returns a `BotResponse`. -->
+
